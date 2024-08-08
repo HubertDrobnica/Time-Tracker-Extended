@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <base target="_top">
+    <?!= HtmlService.createHtmlOutputFromFile('css_header').getContent(); ?>
+    <?!= HtmlService.createHtmlOutputFromFile('css_container').getContent(); ?>
+    <?!= HtmlService.createHtmlOutputFromFile('css_aside').getContent(); ?>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <title>Extra Tasks Tracker</title>
+
+
+
+
+</head>
+
+<body>
+  <div class="container">
+
+    <header class="app-title">
+      <h1>Extra Tasks Tracker</h1>
+
+          <div class="header-chose-agent-container">
+              <label for="agent_picker" class="agent_label">Log in on your production:</label>
+              <select name="agentsDatabaseAccess" id="agent_picker">
+                <!-- <option value="Agent 1">Agent 1</option>
+                <option value="Agent 2">Agent 2</option>
+                <option value="Agent 3">Agent 3</option>
+                <option value="Agent 4">Agent 4</option>
+                <option value="Agent 5">Agent 5</option>
+                <option value="Agent 6">Agent 6</option>
+                <option value="hubert.drobnica01@gmail.com">hubert.drobnica01@gmail.com</option>
+                <option value="Agent 8">Agent 8</option>
+                <option value="Agent 9">Agent 9</option>
+                <option value="Agent 10">Agent 10</option>
+                <option value="Agent 11">Agent 11</option>
+                <option value="Agent 12">Agent 12</option>
+                <option value="Agent 13">Agent 13</option>
+                <option value="Agent 14">Agent 14</option>
+                <option value="Agent 15">Agent 15</option>
+                <option value="Agent 16">Agent 16</option>
+                <option value="Agent 17">Agent 17</option>
+                <option value="Agent 18">Agent 18</option>
+                <option value="Agent 19">Agent 19</option>
+                <option value="Agent 20">Agent 20</option> -->
+              </select>
+          </div>      
+    </header>
+    
+    <main class="main_chart_button_container">   
+      <div class="button_comment_container">
+
+        <div class="button_container">
+          <h3>Choose Extra Activity</h3>
+          <h4>Casual Extra Tasks</h4>
+          <div><label for="">[ f ]</label><button class="task_button">Shadowing</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Schedule Checking</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Arabic Market</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Slang Tracker</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Error Session Review</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Funny Friday</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Events Organization</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Supplying Basic Files</button></div>
+          <h4>Accenture Extra Tasks</h4>
+          <div><label for="">[ f ]</label><button class="task_button">Queue Distribution</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Automation</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Meeting Organisation</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Language Support</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Code Review</button></div>
+          <div><label for="">[ f ]</label><button class="task_button"> TL Support</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Arabic Market Client Calls</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Applying Ideas Support</button></div>
+          <h4>Client Extra Tasks</h4>
+          <div><label for="">[ f ]</label><button class="task_button">Tool Troubleshooting Support</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Food Delivering</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Caffe Picker</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Decks Organisation</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">New Joiners Support</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Errors Explanation</button></div>
+          <h4>Arabic Speaker Tasks</h4>
+          <div><label for="">[ f ]</label><button class="task_button">Creating Deck for New Joiners</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Data Organisation</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Metricks review</button></div>
+          <div><label for="">[ f ]</label><button class="task_button">Client Call Representation</button></div>
+        </div>
+
+        <div class="comment_container">
+          <h3>Extra Note</h3>
+          <div class="comment_placeholder_and_button">
+              <textarea id="story" name="story" rows="5" cols="33" placeholder="Put additional note if it is needed"></textarea>
+              <button id="button_comment">Submit</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="chart_time_container">
+
+        <div class="date_chart">
+          <input type="date" class="input_date" id="input_date" name="trip-start" min="2024-06-01" max="2028-12-31" />
+          <h3>Daily Graph</h3>
+          <div class="myChart-Style"><canvas id="myChart"></canvas></div>
+        </div>
+
+        <div class="time_data">
+
+          <div class="timeframe_report_placeholder">
+            <h3>History</h3>
+            <div class="timeframe_report_lists">
+
+              <ul class="timeframe_report_list_details">
+                <li>Start:</li>
+                <li>End:</li>
+                <li>Total:</li>
+                <li>Task:</li>
+              </ul>
+              <ul class="timeframe_report_list_details">
+                <li>14:50</li>
+                <li>16:00</li>
+                <li>01:10</li>
+                <li>Tool Troubleshooting Support for our client to the support languagesv dfsdd fsdfdfdsfdsf df sdfsdf f sf sdf dsfsd f sd fsd  </li>
+              </ul>
+              <ul class="timeframe_report_list_details">
+                <li>13:50</li>
+                <li>14:00</li>
+                <li>00:10</li>
+                <li>Creating Deck for New Joiners</li>
+              </ul>
+              <ul class="timeframe_report_list_details">
+                <li>14:50</li>
+                <li>16:00</li>
+                <li>01:10</li>
+                <li>Supplying Schedules</li>
+              </ul>
+              <ul class="timeframe_report_list_details">
+                <li>13:50</li>
+                <li>14:00</li>
+                <li>00:10</li>
+                <li>Funny Friday</li>
+              </ul>
+              <ul class="timeframe_report_list_details">
+                <li>14:50</li>
+                <li>16:00</li>
+                <li>01:10</li>
+                <li>Client Call Representation</li>
+              </ul>
+              <ul class="timeframe_report_list_details">
+                <li>14:50</li>
+                <li>16:00</li>
+                <li>01:10</li>
+                <li>Client Call Representation</li>
+              </ul>
+              <ul class="timeframe_report_list_details">
+                <li>14:50</li>
+                <li>16:00</li>
+                <li>01:10</li>
+                <li>Client Call Representation</li>
+              </ul>
+              <ul class="timeframe_report_list_details">
+                <li>14:50</li>
+                <li>16:00</li>
+                <li>01:10</li>
+                <li>Client Call Representation</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+
+    <aside>
+      <h3>Comment History</h3>
+      <p id="comment_history">Hello There. In 12:40 I forgot to put additional note where I was using rhe new features. Keep it in your mind during the next time review, please. Thanks!</p>
+    </aside>
+
+
+  </div>
+
+
+  <!-- JavaScript Section -->
+
+<script>
+
+  let dataChart;
+  let dataLabel;
+
+
+  // Implement Graphs
+
+    let myChart = document.getElementById('myChart').getContext('2d');
+
+    Chart.defaults.font.size =12;
+    Chart.defaults.color = '#ddd';
+
+    let massPopChart = new Chart(myChart, {
+      type:'bar',
+      data: {
+        labels: dataLabel,
+        datasets:[{
+          label:'TimeFrame',
+          data: dataChart
+        }]
+      }, 
+      options: {
+        maintainAspectRatio : false,
+        scales: {
+          y: {
+            min: 0,
+            max: 12
+          }
+        }
+        
+        }
+    })
+
+    //
+
+</script>
+<?!= include('app_server'); ?>
+
+</body>
+</html>
+
