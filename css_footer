@@ -1,0 +1,119 @@
+      if (buttonTask.hasAttribute('active') == true) {
+        let counter = 0
+        extraTaskTimeCounter()
+      } 
+
+      function extraTaskTimeCounter() {
+        setInterval(function() {
+          counter += 1;
+          console.log(counter)
+        }, 1000)
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        function getUsersList() {
+    google.script.run.withSuccessHandler(data => {
+
+      // Variables Used To Choose aAgent In The Select Login Input
+      const parsedAgentsList = JSON.parse(data).agentsList
+      const parsedAgentsListLength = parsedAgentsList.length
+      const parsedactiveAgent = JSON.parse(data).activeAgent
+      const users = document.getElementById("agent_picker");
+
+      for(let j = 0; j < parsedAgentsListLength; j++) {
+        //console.log(parsedAgentsList[j][0])
+        //let agentHTMLOptionTag = document.createElement("Option")
+        //agentPicker.appendChild(agentHTMLOptionTag);
+        //agentHTMLOptionTag.innerHTML = parsedAgentsList[j][0]
+        //agentHTMLOptionTag.setAttribute('id', `${agentHTMLOptionTag.innerHTML = parsedAgentsList[j][0]}`)
+      }
+
+      // User Log In and Allow The User To Take Actions
+      let i;
+      for(i=0; i < parsedAgentsListLength; i++) {
+        console.log(parsedAgentsList[i][0])
+        if (parsedactiveAgent == parsedAgentsList[i][0]) {
+          let agentHTMLOptionTag = document.createElement("Option")
+          agentPicker.appendChild(agentHTMLOptionTag);
+          agentHTMLOptionTag.innerHTML = parsedAgentsList[i][0]
+          agentHTMLOptionTag.setAttribute('id', `${agentHTMLOptionTag.innerHTML = parsedAgentsList[i][0]}`)
+
+          //logInTheUserToDatabase()
+          requestuserDatabaseAccess()
+
+          console.log(agentHTMLOptionTag)
+          //console.log(users[i])
+          agentHTMLOptionTag.setAttribute('selected', 'selected')
+          buttonsActionsAvailable()
+        }  
+      }
+
+      console.log(parsedAgentsList)
+
+    }).withFailureHandler ( er => {
+      alert('error')
+    }).getAgentsList()
+
+    //function logInTheUserToDatabase() {
+      //google.script.run.connectUserToDatabase()
+
+      //google.script.run.withSuccessHandler(data => {
+        //.log(JSON.parse(data).greetings)
+      //}).connectUserToDatabase()
+    //}
+
+
+    console.log(agentPicker)
+  }
+  getUsersList()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  function updateChartAfterInputDateClickForTeamLeader(userDatabase) {
+
+  //const userDatabase = ss.getSheetByName(`${userDatabase}`)
+  let scriptDateCheckRange = userDatabase.getRange(35,1).getValues().toString()
+  let listOfAllDatesInMonth = userDatabase.getRange(2,1,31,1).getValues().flat()
+  console.log(listOfAllDatesInMonth)
+  let row = listOfAllDatesInMonth.indexOf(scriptDateCheckRange) + 2
+  console.log(row)
+  let randomData = userDatabase.getRange(row,1).getValues()[0]
+
+  let listOfExtraActivities = userDatabase.getRange(1,4,1, 20).getValues()[0]
+  let fullCellsOfExtraAtivities = listOfExtraActivities.filter(extraActivity => extraActivity.toString().length > 0)
+  lengthOfExtraAtivities = fullCellsOfExtraAtivities.length
+  let extraActivityTimeFromDay = userDatabase.getRange(row, 4, 1, lengthOfExtraAtivities).getValues().flat()
+  let extraActivityMonthSchedule = userDatabase.getRange(1, 4, 1, lengthOfExtraAtivities).getValues().flat()
+
+  let existedComment = userDatabase.getRange(row, 2).getValues().flat()
+
+
+  return JSON.stringify({randomData, row, extraActivityTimeFromDay, extraActivityMonthSchedule, existedComment})
+}
