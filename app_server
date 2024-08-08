@@ -1,0 +1,372 @@
+<script>
+
+  // HTML Variables
+  let agentPicker = document.getElementById('agent_picker');
+  console.log(1)
+
+  // insert list of users in select tag
+  function getUsersList() {
+    google.script.run.withSuccessHandler(data => {
+
+      // Variables Used To Choose aAgent In The Select Login Input
+      const parsedAgentsList = JSON.parse(data).agentsList
+      const parsedAgentsListLength = parsedAgentsList.length
+      const parsedactiveAgent = JSON.parse(data).activeAgent
+      const teamLeadersList = JSON.parse(data).teamLeadersList
+      teamLeadersList.forEach(tl => {
+        console.log(tl[0])
+      })
+      const users = document.getElementById("agent_picker");
+
+      // User Log In and Allow The User To Take Actions
+      if (parsedAgentsList.flat().includes(`${parsedactiveAgent}`) == true ) {
+        let i;
+
+        for(i=0; i < parsedAgentsListLength; i++) {
+        console.log(parsedAgentsList[i][0])
+        if (parsedactiveAgent == parsedAgentsList[i][0]) {
+          let agentHTMLOptionTag = document.createElement("Option")
+          agentPicker.appendChild(agentHTMLOptionTag);
+          agentHTMLOptionTag.innerHTML = parsedAgentsList[i][0]
+          agentHTMLOptionTag.setAttribute('id', `${agentHTMLOptionTag.innerHTML = parsedAgentsList[i][0]}`)
+
+          //logInTheUserToDatabase()
+          requestuserDatabaseAccess()
+
+          console.log(agentHTMLOptionTag)
+          //console.log(users[i])
+          agentHTMLOptionTag.setAttribute('selected', 'selected')
+          buttonsActionsAvailable()
+          updateChart()
+          updateComment()
+        }
+
+      }
+
+
+      }
+
+      // Check If The User Is Manager | If They Are - Add Admin Functions
+      if (teamLeadersList.flat().includes(`${parsedactiveAgent}`) == true ) {
+        console.log(teamLeadersList.flat())
+        let i
+        for(i=0; i < parsedAgentsListLength; i++) {
+          let agentHTMLOptionTag = document.createElement("option")
+          agentHTMLOptionTag.setAttribute('class', 'agent_picker_option')
+          agentPicker.appendChild(agentHTMLOptionTag)
+          agentHTMLOptionTag.innerHTML = parsedAgentsList[i][0]
+          agentHTMLOptionTag.setAttribute('id', `${agentHTMLOptionTag.innerHTML = parsedAgentsList[i][0]}`)
+          console.log(agentHTMLOptionTag)
+          } 
+          agentPicker.addEventListener('change', (event) => {
+            let agentArray = [];
+            console.log(event.target.value)
+            let agentNameID = event.target.value
+            agentPickerValue = event.target.value
+            console.log(event.target)
+            console.log(event.target.querySelectorAll('.agent_picker_option'))
+            event.target.querySelectorAll('.agent_picker_option').forEach(agentPickerAgent => {
+              agentArray.push(agentPickerAgent)
+            })
+            let selectedOption = agentArray.find(childNode => childNode.innerHTML == event.target.value) 
+            //agentArray.forEach(childNode => selectedOption?.removeAttribute('selected') )
+           // selectedOption?.removeAttribute('selected')  
+            selectedOption.setAttribute('agent_selected', 'true')
+
+            let selectedOptionsBefore = agentArray.filter(agent => agent !== selectedOption)
+            selectedOptionsBefore.forEach(selectedOptionBefore => { selectedOptionBefore.setAttribute('agent_selected','false') })
+            
+
+            //google.script.run.withSuccessHandler().getAccessToAgentsDatabaseAsTeamLeader(agentNameID)
+            adminFunctions()
+
+            })
+
+
+
+        }
+
+                
+
+      console.log(parsedAgentsList)
+
+    }).withFailureHandler ( er => {
+      alert('error')
+    }).getAgentsList()
+
+    //function logInTheUserToDatabase() {
+      //google.script.run.connectUserToDatabase()
+
+      //google.script.run.withSuccessHandler(data => {
+        //.log(JSON.parse(data).greetings)
+      //}).connectUserToDatabase()
+    //}
+
+
+    console.log(agentPicker)
+  }
+  getUsersList()
+
+
+
+  //Get Data From Database After Log In The user
+  function requestuserDatabaseAccess() {
+    google.script.run.sendUsersDataToInterface()
+    
+    google.script.run.withSuccessHandler(data => {
+      console.log(JSON.parse(data).userDatabase)
+    }).sendUsersDataToInterface()
+  }
+
+  function requestuserDatabaseAccessAsTeamLeader() {
+    google.script.run.getAccessToAgentsDatabaseAsTeamLeader()
+
+
+  }
+
+  function buttonsActionsAvailable() {
+    // Catch all buttons in a list
+    const buttonsTask = document.querySelectorAll('.task_button');
+
+    // Timer function for all the buttons
+    let counter = 0
+    let interval = null
+
+    function timer(buttonName) {
+      counter = 1
+      //console.log(counter)
+      //if(counter % 1 === 0) {
+        console.log(counter)
+        console.log(buttonName)
+
+        google.script.run.withSuccessHandler().passSentTimeDuration(counter, buttonName)
+      //}
+    }
+
+    function start(buttonName) {
+      if(interval) {
+        return;
+      }
+      console.log(buttonName)
+      google.script.run.withSuccessHandler().passExtraActivityAsTitleToDatabase(buttonName)
+      interval = setInterval(timer, 1000, buttonName)
+    }
+
+    function stop() {
+      clearInterval(interval)
+      interval = null
+    }
+
+    function reset() {
+      stop()
+      counter = 0
+    }
+
+    // Safe Time Duration of Extra Activity Sending To The Server
+    //function sendAndGetSafeTimeDurationToServer(counter) {
+    //  console.log(counter)
+    //  google.script.run.withSuccessHandler().passSentTimeDuration(counter)
+    //}
+    
+    //iterate buttons 
+    buttonsTask.forEach(buttonTask => {
+
+      buttonTask.addEventListener('click', function() {
+        console.log(buttonTask)
+        let buttonName = buttonTask.innerHTML
+
+        // Main Button Actions To Start Running Timer For Agents 
+        if(buttonTask.hasAttribute('active') == false) {
+
+          buttonTask.setAttribute('active', 'true')
+          let disabledButtons = Array.from(buttonsTask)
+          let unactiveButtons = disabledButtons.filter(filterDisabledButton)
+
+          function filterDisabledButton(disabledButton) {
+            return disabledButton.hasAttribute('active') == false
+          }
+
+          unactiveButtons.forEach(unactiveButton => {
+            unactiveButton.disabled = true
+            unactiveButton.classList.add('task_button_unactive')
+            unactiveButton.classList.remove('task_button:hover')
+          })
+          buttonTask.classList.add('task_button_active')
+          start(buttonName)
+          console.log(counter)
+
+        } 
+        else {
+          buttonTask.removeAttribute('active')
+          buttonsTask.forEach( buttonTask => {
+            buttonTask.disabled = false
+            buttonTask.classList.remove('task_button_unactive')
+          })
+          buttonTask.classList.remove('task_button_active')
+          console.log(counter)
+          reset()
+          console.log('reset button')
+        }
+        
+      })
+
+    })
+  }
+
+  
+
+    // Update Chart And Comment Section With Data From Backend
+    let dateChartPicker = document.getElementById('input_date')
+    const commentButton = document.getElementById('button_comment')
+    const commentTextArea = document.getElementById('story');
+    let commentHistory = document.getElementById('comment_history');
+
+    function updateChart() {
+
+    dateChartPicker.addEventListener('change', (e) => {
+
+      // Sending Date Picked By User In Input Date To Store
+      new Promise((resolve, reject) => {
+        console.log(dateChartPicker.value)
+        let year = dateChartPicker.value.slice(0,4).toString()
+        let month = dateChartPicker.value.slice(5,7).toString()
+        let day = dateChartPicker.value.slice(8,10).toString()
+        let sheetCurrentDate = `${month}.${day}.${year}`
+        console.log(sheetCurrentDate)
+        google.script.run.withSuccessHandler().insertScriptDateCheck(sheetCurrentDate)
+        resolve()
+
+      // Get Date To Send To Chart
+      }).then((response) => {
+        setTimeout(() => {
+          google.script.run.withSuccessHandler(data => {
+        let randomData = JSON.parse(data).randomData
+        let row = JSON.parse(data).row
+        let extraActivityTimeFromDay = JSON.parse(data).extraActivityTimeFromDay
+        let extraActivityMonthSchedule = JSON.parse(data).extraActivityMonthSchedule
+        let existedComment = JSON.parse(data).existedComment
+        existedComment.toString()
+        console.log(extraActivityMonthSchedule)
+        massPopChart.data.datasets[0].data = extraActivityTimeFromDay
+        massPopChart.data.labels = extraActivityMonthSchedule
+        massPopChart.update()
+
+        commentHistory.textContent = existedComment
+
+
+
+      }).updateChartAfterInputDateClick()
+        }, 1000)
+
+        return response
+      })
+    })
+    }
+
+    function updateComment() {
+    commentButton.addEventListener('click', () => {
+
+      new Promise((resolve, reject) => {
+
+        let comment = commentTextArea.value
+        google.script.run.withSuccessHandler().insertComment(comment)
+        commentTextArea.value = ''
+        resolve()
+
+      }).then((response) => {
+
+        google.script.run.withSuccessHandler(data => {
+        let existedComment = JSON.parse(data).existedComment
+        commentHistory.textContent = existedComment
+        return response
+        }).updateCommentHistoryAfterInsertCommentToDatabase()
+        
+      })
+
+    })
+    }
+
+    // All Changes In Code Structure For Managers
+    function adminFunctions() {
+
+      function disableButtonAndComment() {
+
+        const buttonsTask = document.querySelectorAll('.task_button');
+        const commentArea = document.getElementById('story')
+        const buttonComment = document.getElementById('button_comment')
+
+        commentArea.setAttribute('disabled', '')
+        buttonComment.classList.add('task_button_unactive')
+        buttonComment.classList.remove('task_button:hover')
+
+        
+        buttonsTask.forEach(buttonTask => {
+          //buttonTask.add = true
+          buttonTask.classList.add('task_button_unactive')
+          buttonTask.classList.remove('task_button:hover')
+
+        })
+      }
+
+      function checkChartAndCommentForTeamLeader() {
+
+        dateChartPicker.addEventListener('change', (e) => {
+
+          // Sending Date Picked By User In Input Date To Store
+          new Promise((resolve, reject) => {
+            console.log(dateChartPicker.value)
+            let year = dateChartPicker.value.slice(0,4).toString()
+            let month = dateChartPicker.value.slice(5,7).toString()
+            let day = dateChartPicker.value.slice(8,10).toString()
+            let sheetCurrentDate = `${month}.${day}.${year}`
+            console.log(sheetCurrentDate)
+
+            // Getting Active User From Agent List
+            let agentsList = document.getElementsByClassName('agent_picker_option')
+            //console.log(agentsList)
+            
+            let pickedAgent = Array.from(agentsList).filter(agent => agent.getAttribute('agent_selected') === 'true')
+            pickedAgent = pickedAgent[0].innerText
+            console.log(pickedAgent)
+
+            google.script.run.withSuccessHandler().getAccessToAgentsDatabaseAsTeamLeader(sheetCurrentDate, pickedAgent)
+            resolve()
+
+          // Get Date To Send To Chart
+          }).then((response) => {
+            setTimeout(() => {
+              google.script.run.withSuccessHandler(data => {
+            let randomData = JSON.parse(data).randomData
+            let row = JSON.parse(data).row
+            let extraActivityTimeFromDay = JSON.parse(data).extraActivityTimeFromDay
+            let extraActivityMonthSchedule = JSON.parse(data).extraActivityMonthSchedule
+            let existedComment = JSON.parse(data).existedComment
+            existedComment.toString()
+            console.log(extraActivityMonthSchedule)
+            massPopChart.data.datasets[0].data = extraActivityTimeFromDay
+            massPopChart.data.labels = extraActivityMonthSchedule
+            massPopChart.update()
+
+            commentHistory.textContent = existedComment
+
+
+
+          }).insertScriptDateCheckForTeamLeader()
+            }, 1000)
+
+            return response
+          })
+      })
+
+      }
+
+      disableButtonAndComment()
+      checkChartAndCommentForTeamLeader()
+
+    }
+
+
+
+
+
+</script>
