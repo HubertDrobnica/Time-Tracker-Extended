@@ -1,0 +1,23 @@
+<style>
+
+/* Aside as a Comment Virtual Pop Up */
+
+aside {
+    background-color: #2c2e3b;
+    margin: 20px 0 0 0;
+    padding: 20px 30px;
+    border-radius: 15px;
+    font-size: 18px;
+    color: #8e8e8e;
+}
+
+aside h3 {
+    margin: 0 0 20px 0;
+    color: #f0f0f0;
+}
+
+aside p {
+    letter-spacing: 1px;
+}
+
+</style>
